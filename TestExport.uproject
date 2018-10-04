@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{9585FFF7-497E-0101-9EB7-EA82B8BD98DD}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "TestExport",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
