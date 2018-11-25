@@ -11,7 +11,7 @@
 #include "PlatformFilemanager.h"
 #include "Runtime/Json/Public/Dom/JsonObject.h"
 #include "Runtime/Json/Public/Serialization/JsonReader.h"
-#include "Runtime/Json/Public/Serialization/JsonReader.h"
+#include "Runtime/Json/Public/Serialization/JsonSerializer.h"
 #include "Runtime/Online/HTTP/Public/Http.h"
 #include "Runtime/json/public/serialization/JsonWriter.h"
 #include "Engine/World.h"
@@ -28,10 +28,45 @@ class TESTEXPORT_API AMyPlayerController : public APlayerController
 	
 private:
 	FString gameName = "Test";
-	FString backEndAddress = "192.168.1.2";
+	FString backEndAddress = "81.5.93.98";
 public:
-	void PostSendCrash(FString login, FString password, FString email);
-	void OnYourFunctionCompleted(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
+
+
+	UPROPERTY(BlueprintReadOnly)
+		int result=-10;
+
+
+	UPROPERTY(BlueprintReadOnly)
+		int id =-10;	
+	
+	UPROPERTY(BlueprintReadOnly)
+		FString info="";
+
+	
+	UFUNCTION(BlueprintCallable)
+		FString getInfo();	
+
+	UFUNCTION(BlueprintCallable)
+		int getId();
+
+
+
+
+	UFUNCTION(BlueprintCallable, Category = "Backend", meta = (DisplayName = "Registration Player"))
+	void Registration(FString login, FString password, FString email);
+
+	UFUNCTION(BlueprintCallable, Category = "Backend", meta = (DisplayName = "Authorization Player"))
+	void Authorization(FString login, FString password);
+
+	UFUNCTION(BlueprintCallable, Category = "Backend", meta = (DisplayName = "Update Player"))
+	void Update(int idPlayer, FString newInfo);
+
+
+
+
+	void OnRegistrationCompleted(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
+	void OnAuthorizationCompleted(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
+	void OnUpdateCompleted(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
 
 	
 	
