@@ -23,6 +23,27 @@ enum class ESteamVRTrackedDeviceType : uint8
 	Invalid
 };
 
+USTRUCT(BlueprintType)
+struct STEAMVR_API FCoords
+{
+	GENERATED_USTRUCT_BODY()
+//public:
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FVector LocationRep;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FRotator RotatorRep;
+	
+	FCoords() {};
+	
+	FCoords(FVector l, FRotator r) { 
+		LocationRep = l;
+		RotatorRep = r;			
+	};
+};
+
 /**
  * SteamVR Extensions Function Library
  */
@@ -50,11 +71,14 @@ public:
 	 * @param	OutOrientation	(out) Current orientation of the device
 	 * @return	True if the specified device id had a valid tracking pose this frame, false otherwise
 	 */
-	UFUNCTION(BlueprintPure, Category = "SteamVR")
+		UFUNCTION(BlueprintPure, Category = "SteamVR")
 	static bool GetTrackedDevicePositionAndOrientation(int32 DeviceId, FVector& OutPosition, FRotator& OutOrientation);
 
 		UFUNCTION(BlueprintPure, Category = "SteamVR")
 	static bool GetControllerDevicePositionAndOrientation(int32 Number, FVector& OutPosition, FRotator& OutOrientation);
+		
+		UFUNCTION(BlueprintPure, Category = "SteamVR")
+	static bool GetAllControllerDevicePositionAndOrientation(bool BodyWithController, TMap<int,FCoords>& Orientations);
 
 	/**
 	 * Given a controller index and a hand, returns the position and orientation of the controller

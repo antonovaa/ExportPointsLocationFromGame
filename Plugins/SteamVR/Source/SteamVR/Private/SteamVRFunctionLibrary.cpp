@@ -156,6 +156,67 @@ bool USteamVRFunctionLibrary::GetControllerDevicePositionAndOrientation(int32 Nu
 	return RetVal;
 }
 
+bool USteamVRFunctionLibrary::GetAllControllerDevicePositionAndOrientation(bool BodyWithController, TMap<int, FCoords>& Orientations)
+{
+	bool RetVal = false;
+
+#if STEAMVR_SUPPORTED_PLATFORMS
+	vr::IVRSystem* VRSystem = GetVRSystem();
+	FSteamVRHMD* SteamVRHMD = GetSteamVRHMD();
+	if (VRSystem != nullptr&&SteamVRHMD)
+	{
+		int count = 3;
+		int control = 0;
+		for (uint32 DeviceIndex = 0; DeviceIndex < vr::k_unMaxTrackedDeviceCount; ++DeviceIndex)
+		{
+			// see what kind of hardware this is
+			vr::ETrackedDeviceClass DeviceClass = VRSystem->GetTrackedDeviceClass(DeviceIndex);
+
+			// skip non-controller or non-tracker devices
+			if (DeviceClass != vr::TrackedDeviceClass_Controller && DeviceClass != vr::TrackedDeviceClass_GenericTracker&&DeviceClass!= vr::TrackedDeviceClass_HMD)
+			{
+				continue;
+			}
+
+			FRotator OutOrientation;
+			FVector OutPosition;	
+
+			if (DeviceClass == vr::TrackedDeviceClass_HMD)
+			{			
+				FQuat DeviceOrientation = FQuat::Identity;
+				RetVal = SteamVRHMD->GetCurrentPose(DeviceIndex, DeviceOrientation, OutPosition);
+				OutOrientation = DeviceOrientation.Rotator();		
+				Orientations.Add(0, FCoords(OutPosition, OutOrientation)); //0 --head
+			}	
+			if (DeviceClass == vr::TrackedDeviceClass_Controller&&BodyWithController)
+			{			
+				control++;
+				FQuat DeviceOrientation = FQuat::Identity;
+				RetVal = SteamVRHMD->GetCurrentPose(DeviceIndex, DeviceOrientation, OutPosition);
+				OutOrientation = DeviceOrientation.Rotator();
+				Orientations.Add(control, FCoords(OutPosition, OutOrientation)); 	//1,2 -- controllers	
+			}	
+			if (DeviceClass == vr::TrackedDeviceClass_GenericTracker)
+			{			
+				FQuat DeviceOrientation = FQuat::Identity;
+				RetVal = SteamVRHMD->GetCurrentPose(DeviceIndex, DeviceOrientation, OutPosition);
+				OutOrientation = DeviceOrientation.Rotator();
+				Orientations.Add(count, FCoords(OutPosition, OutOrientation)); //3+ --trackers
+				count++;
+			}
+		}
+		return RetVal;
+	}
+	else if(SteamVRHMD)
+	{
+		SteamVRPlugin = &FModuleManager::LoadModuleChecked<ISteamVRPlugin>(TEXT("SteamVR"));
+	}
+
+#endif // STEAMVR_SUPPORTED_PLATFORMS
+
+	return RetVal;
+}
+
 bool USteamVRFunctionLibrary::GetHandPositionAndOrientation(int32 ControllerIndex, EControllerHand Hand, FVector& OutPosition, FRotator& OutOrientation)
 {
 	bool RetVal = false;
