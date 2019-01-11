@@ -9,19 +9,19 @@ namespace UnrealBuildTool.Rules
 			PrivateIncludePaths.AddRange(
 				new string[] {
 					"SteamVR/Private",
-                    "C:/Games/UE4Git/UnrealEngine/Engine/Source/Runtime/Renderer/Private",
-                    "C:/Games/UE4Git/UnrealEngine/Engine/Source/Runtime/VulkanRHI/Private",
+                    "D:/Development/Git Unreal Engine 4.20.3/UnrealEngine/Engine/Source/Runtime/Renderer/Private",
+                    "D:/Development/Git Unreal Engine 4.20.3/UnrealEngine/Engine/Source/Runtime/VulkanRHI/Private",
 					// ... add other private include paths required here ...
 				}
 				);
 
 			if(Target.Platform == UnrealTargetPlatform.Win32 || Target.Platform == UnrealTargetPlatform.Win64)
 			{
-				PrivateIncludePaths.Add("C:/Games/UE4Git/UnrealEngine/Engine/Source/Runtime/VulkanRHI/Private/Windows");
+				PrivateIncludePaths.Add("D:/Development/Git Unreal Engine 4.20.3/UnrealEngine/Engine/Source/Runtime/VulkanRHI/Private/Windows");
 			}
 			else if(Target.Platform != UnrealTargetPlatform.Mac)
 			{
-				PrivateIncludePaths.Add("C:/Games/UE4Git/UnrealEngine/Engine/Source/Runtime/VulkanRHI/Private/" + Target.Platform);
+				PrivateIncludePaths.Add("D:/Development/Git Unreal Engine 4.20.3/UnrealEngine/Engine/Source/Runtime/VulkanRHI/Private/" + Target.Platform);
 			}
 
 			PrivateDependencyModuleNames.AddRange(
