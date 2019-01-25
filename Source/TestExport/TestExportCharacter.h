@@ -6,6 +6,20 @@
 #include "GameFramework/Character.h"
 #include "TestExportCharacter.generated.h"
 
+
+USTRUCT(BlueprintType)
+struct FCoords
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadWrite)
+		FVector location;		
+	
+	UPROPERTY(BlueprintReadWrite)
+		FRotator rotation;
+
+};
+
 UCLASS(config=Game)
 class ATestExportCharacter : public ACharacter
 {
